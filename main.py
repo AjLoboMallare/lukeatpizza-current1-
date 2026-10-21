@@ -23,23 +23,7 @@ def _m(id, cat, name, desc, p, tags, sauce, dots, n, **x):
 
 
 # 100% fixed price array syntax maps [Small 10", Large 14"]
-MENU = [
-    _m("margherita", "Classics", "Margherita", "San Marzano tomato, fior di latte, basil, olive oil.", [249, 399], ["veg"], 1, ["#2f6b3a"], 6),
-    _m("marinara", "Classics", "Marinara", "Tomato, raw garlic, oregano, olive oil. No cheese.", [199, 329], ["veg", "vegan"], 1, ["#2f6b3a", "#e8dfb0"], 5, nocheese=1),
-    _m("pepperoni", "Classics", "Pepperoni", "Tomato, fior di latte, cup-and-char pepperoni, hot honey.", [299, 479], ["hot"], 1, ["#9e1d12"], 11),
-    _m("diavola", "Classics", "Diavola", "Tomato, spicy salami, fior di latte, chilli oil.", [329, 529], ["hot"], 1, ["#b3261a", "#e0662b"], 10),
-    _m("quattro", "Bianche", "Quattro Formaggi", "Fior di latte, gorgonzola, parmesan, fontina, black pepper.", [349, 549], ["veg"], 0, ["#d9b44a", "#f7f0d8", "#7d8b9a"], 9),
-    _m("funghi", "Bianche", "Funghi e Tartufo", "Roasted mushrooms, fontina, thyme, truffle oil.", [369, 579], ["veg"], 0, ["#8b6b4a", "#b79a74"], 10),
-    _m("salsiccia", "Bianche", "Salsiccia", "Fennel sausage, broccolini, fior di latte, chilli flake.", [349, 549], ["hot"], 0, ["#a0522d", "#3f7d46"], 10),
-    _m("ortolana", "Vegetarian", "Ortolana", "Tomato, zucchini, roasted peppers, red onion, olives.", [299, 479], ["veg"], 1, ["#3f7d46", "#d9822b", "#7b3f6e", "#2b2b2b"], 12),
-    _m("pesto", "Vegetarian", "Pesto e Pomodorini", "Basil pesto, blistered cherry tomatoes, burrata.", [349, 569], ["veg"], 0, ["#3f7d46", "#d93a24", "#f7f0d8"], 10, green=1),
-    _m("knots", "Sides & drinks", "Garlic knots", "Six knots from the same dough, garlic butter, parsley.", [129], ["veg"], 0, ["#d8a45e"], 6, plain=1),
-    _m("burrata", "Sides & drinks", "Burrata & tomato", "Burrata, heirloom tomato, basil, flaky salt.", [229], ["veg"], 0, ["#d93a24", "#3f7d46"], 7, plain=1),
-    _m("tiramisu", "Sides & drinks", "Tiramisu", "Espresso-soaked ladyfingers, mascarpone, cocoa.", [149], ["veg"], 0, ["#5b3a29"], 4, plain=1),
-    _m("soda", "Sides & drinks", "Sparkling lemon soda", "Bottled, served cold.", [69], ["veg", "vegan"], 0, ["#e6cf4a"], 3, plain=1),
-    _m("ginger", "Sides & drinks", "Ginger beer", "Sharp, spicy, not too sweet.", [79], ["veg", "vegan"], 0, ["#c9a24a"], 3, plain=1),
-]
-BY_ID = {m["id"]: m for m in MENU}
+
 
 
 # ---- pizza drawing (Original working closure state kept intact) ----
