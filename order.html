@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Order · Luke at Pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<!-- PyScript -->
+<link rel="stylesheet" href="https://pyscript.net/releases/2026.7.1/core.css">
+<script type="module" src="https://pyscript.net/releases/2026.7.1/core.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Luke at pizza logo" onerror="this.style.display='none'"><span>Luke at <span>Pizza</span></span></a>
+    <nav aria-label="Main">
+      <a href="menu.html">Menu</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="visit.html">Visit</a>
+      <a class="btn small" href="order.html">Order</a>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section id="order">
+    <p class="eyebrow">Order</p>
+    <h2>Your order</h2>
+    <div class="order">
+      <div class="panel" aria-live="polite">
+        <h3>Basket</h3>
+        <div id="lines"></div>
+        <div class="sum" id="sum"></div>
+      </div>
+      <div class="panel">
+        <h3>Details</h3>
+        <form id="orderForm" novalidate>
+          <div class="f">
+            <span class="legend" id="modeLegend">How do you want it?</span>
+            <div class="seg" role="radiogroup" aria-labelledby="modeLegend">
+              <label><input type="radio" name="mode" id="modePickup" value="pickup" checked><span>Pickup</span></label>
+              <label><input type="radio" name="mode" id="modeDelivery" value="delivery"><span>Delivery +$3</span></label>
+            </div>
+          </div>
+          <div class="two">
+            <div class="f"><label class="l" for="name">Name</label><input type="text" id="name" autocomplete="name" placeholder="Your name"></div>
+            <div class="f"><label class="l" for="phone">Phone</label><input type="tel" id="phone" autocomplete="tel" placeholder="Mobile number"></div>
+          </div>
+          <div class="f" id="addrRow" hidden><label class="l" for="addr">Delivery address</label><input type="text" id="addr" autocomplete="street-address" placeholder="Street, unit, landmark"></div>
+          <div class="f"><label class="l" for="when">Ready at</label>
+            <select id="when"><option>As soon as possible (about 25 min)</option><option>In 45 minutes</option><option>In 1 hour</option><option>In 90 minutes</option></select>
+          </div>
+          <div class="f"><label class="l" for="notes">Notes for the kitchen</label><textarea id="notes" placeholder="Allergies, cut into squares, extra crispy…"></textarea></div>
+          <button class="btn" type="submit" style="width:100%">Place order</button>
+          <p class="note" id="formErr" role="alert"></p>
+        </form>
+        <div class="confirm" id="confirm" hidden><b>Demo mode.</b> <span id="confirmText"></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="wrap">
+  <footer>
+    <span>© 2026 Luke at Pizza. Wood-fired pizza.</span>
+    <span>Allergens: our kitchen handles wheat, dairy, nuts and sesame.</span>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <b id="barText">0 items · $0</b>
+    <a class="btn" href="order.html">Checkout</a>
+  </div>
+</div>
+<script type="py" src="main.py"></script>
+<script type="py">
+def render_cart():
+    t = totals()
+    if t["n"] == 0:
+        q("#lines").innerHTML = '<p class="empty">Your basket is empty. Add something from the menu.</p>'
+        q("#sum").innerHTML = ""
+    else:
+        rows = []
+        for l in t["lines"]:
+            m = l["m"]
+            small = "<small>%s</small>" % SIZES[l["s"]].replace('"', "&quot;") if len(m["p"]) > 1 else ""
+            rows.append(
+                '<div class="line"><div class="nm">%s%s</div><div class="amt">%s</div>'
+                '<div class="qty"><button type="button" data-dec="%s" aria-label="Remove one %s">−</button><output>%d</output>'
+                '<button type="button" data-inc="%s" aria-label="Add one %s">+</button></div><span></span></div>'
+                % (m["name"], small, money(l["unit"] * l["q"]), l["key"], m["name"], l["q"], l["key"], m["name"]))
+        q("#lines").innerHTML = "".join(rows)
+        s = '<div><span>Subtotal</span><span>%s</span></div>' % money(t["sub"])
+        if t["dl"]:
+            s += '<div><span>Delivery</span><span>%s</span></div>' % money(t["dl"])
+        s += '<div class="total"><span>Total</span><span>%s</span></div>' % money(t["total"])
+        q("#sum").innerHTML = s
+    render_bar()
+
+
+@when("click", "#lines")
+def on_qty(event):
+    inc = event.target.closest("[data-inc]")
+    dec = event.target.closest("[data-dec]")
+    if inc:
+        cart[inc.getAttribute("data-inc")] += 1
+    elif dec:
+        k = dec.getAttribute("data-dec")
+        cart[k] -= 1
+        if cart[k] <= 0:
+            del cart[k]
+    else:
+        return
+    save_cart()
+    render_cart()
+
+
+@when("change", "#modePickup, #modeDelivery")
+def sync_mode(event):
+    d = is_delivery()
+    q("#addrRow").hidden = not d
+    q("#when").previousElementSibling.textContent = "Deliver at" if d else "Ready at"
+    render_cart()
+
+
+@when("submit", "#orderForm")
+def place_order(event):
+    event.preventDefault()
+    t = totals()
+    err = q("#formErr")
+    name = q("#name").value.strip()
+    phone = q("#phone").value.strip()
+    err.textContent = ""
+    q("#confirm").hidden = True
+    if t["n"] == 0:
+        err.textContent = "Add at least one item to your basket first."
+        return
+    if not name or not phone:
+        err.textContent = "Enter your name and phone number so we can reach you."
+        return
+    if is_delivery() and not q("#addr").value.strip():
+        err.textContent = "Enter a delivery address."
+        return
+    kind = "delivery" if is_delivery() else "pickup"
+    q("#confirmText").textContent = (
+        "Thanks, %s. This is a preview of your %s order for %s (%d %s). "
+        "No order was sent because this site is not connected to a kitchen yet."
+        % (name, kind, money(t["total"]), t["n"], "item" if t["n"] == 1 else "items"))
+    q("#confirm").hidden = False
+
+
+render_cart()
+</script>
+</body>
+</html>

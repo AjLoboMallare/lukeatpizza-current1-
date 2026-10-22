@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Menu · Luke at Pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<!-- PyScript -->
+<link rel="stylesheet" href="https://pyscript.net/releases/2026.7.1/core.css">
+<script type="module" src="https://pyscript.net/releases/2026.7.1/core.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Luke at pizza logo" onerror="this.style.display='none'"><span>Luke at <span>Pizza</span></span></a>
+    <nav aria-label="Main">
+      <a href="menu.html">Menu</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="visit.html">Visit</a>
+      <a class="btn small" href="order.html">Order</a>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section id="menu">
+    <div class="menu-head">
+      <div>
+        <p class="eyebrow">Menu</p>
+        <h2>Pick your pie</h2>
+      </div>
+      <div class="tabs" role="group" aria-label="Menu category" id="tabs"></div>
+    </div>
+    <div class="grid" id="menuGrid"></div>
+    <p class="note">Small is 10 inches. Large is 14 inches. Prices shown are sample prices in dollars.</p>
+  </section>
+</main>
+<div class="wrap">
+  <footer>
+    <span>©2026 Luke at Pizza. Wood-fired pizza.</span>
+    <span>Allergens: our kitchen handles wheat, dairy, nuts and sesame.</span>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <b id="barText">0 items · $0</b>
+    <a class="btn" href="order.html">Checkout</a>
+  </div>
+</div>
+<script type="py" src="main.py"></script>
+<script type="py">
+CATS = ["All", "Classics", "Bianche", "Vegetarian", "Sides & drinks"]
+LABEL = {"veg": "Vegetarian", "hot": "Spicy", "vegan": "Vegan"}
+state = {"cat": "All"}
+
+
+def render_tabs():
+    q("#tabs").innerHTML = "".join(
+        '<button type="button" class="tab" data-cat="%s" aria-pressed="%s">%s</button>'
+        % (c, str(c == state["cat"]).lower(), c.replace("&", "&amp;")) for c in CATS)
+
+
+def render_menu():
+    out = []
+    for m in MENU:
+        if state["cat"] != "All" and m["cat"] != state["cat"]:
+            continue
+        tags = "".join('<span class="tag %s">%s</span>' % ("veg" if t == "vegan" else t, LABEL[t]) for t in m["tags"])
+        if len(m["p"]) > 1:
+            seg = '<div class="seg" role="radiogroup" aria-label="Size for %s">' % m["name"]
+            for i, s in enumerate(SIZES):
+                seg += ('<label><input type="radio" name="sz-%s" id="sz-%s-%d" value="%d" data-size-for="%s"%s><span>%s</span></label>'
+                        % (m["id"], m["id"], i, i, m["id"], " checked" if i == 0 else "", s.replace('"', "&quot;")))
+            seg += "</div>"
+        else:
+            seg = '<span class="tag">One size</span>'
+        out.append(
+            '<article class="item"><div>%s</div><div class="body"><h3>%s</h3><p>%s</p><div class="tags">%s</div></div>'
+            '<div class="buy">%s<span class="price" id="pr-%s">%s</span><button type="button" class="btn add" data-add="%s">Add</button></div></article>'
+            % (pizzaSVG(m["art"], MENU.index(m) + 1, 84), m["name"], m["desc"], tags, seg, m["id"], money(m["p"][0]), m["id"]))
+    q("#menuGrid").innerHTML = "".join(out)
+
+
+@when("click", "#tabs")
+def on_tab(event):
+    b = event.target.closest("[data-cat]")
+    if not b:
+        return
+    state["cat"] = b.getAttribute("data-cat")
+    render_tabs()
+    render_menu()
+
+
+@when("change", "#menuGrid")
+def on_size(event):
+    i = event.target.getAttribute("data-size-for")
+    if not i:
+        return
+    q("#pr-" + i).textContent = money(BY_ID[i]["p"][int(event.target.value)])
+
+
+@when("click", "#menuGrid")
+def on_add(event):
+    b = event.target.closest("[data-add]")
+    if not b:
+        return
+    i = b.getAttribute("data-add")
+    size = 0
+    if len(BY_ID[i]["p"]) > 1:
+        chk = document.querySelector('input[name="sz-%s"]:checked' % i)
+        size = int(chk.value) if chk else 0
+    key = "%s:%d" % (i, size)
+    cart[key] = cart.get(key, 0) + 1
+    save_cart()
+    render_bar()
+    b.textContent = "Added ✓"
+    window.setTimeout(create_proxy(lambda: setattr(b, "textContent", "Add")), 900)
+
+
+render_tabs()
+render_menu()
+</script>
+</body>
+</html>
