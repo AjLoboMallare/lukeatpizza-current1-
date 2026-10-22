@@ -1,68 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Luke at Pizza</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="style.css">
-<!-- PyScript -->
-<link rel="stylesheet" href="https://pyscript.net/releases/2026.7.1/core.css">
-<script type="module" src="https://pyscript.net/releases/2026.7.1/core.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forno Nove — Wood-fired Pizza</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://pyscript.net"></script>
 </head>
 <body>
-<header class="top">
-  <div class="wrap">
-    <a class="logo" href="index.html"><img src="logo.png" alt="Luke at pizza logo" onerror="this.style.display='none'"><span>Luke at <span>Pizza</span></span></a>
-    <nav aria-label="Main">
-      <a href="menu.html">Menu</a>
-      <a href="our-story.html">Our Story</a>
-      <a href="visit.html">Visit</a>
-      <a class="btn small" href="order.html">Order</a>
-      <button class="icon-btn" id="theme" type="button" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+
+<header class="wrap">
+    <nav>
+        <a href="index.html" class="logo" aria-label="Forno Nove home">
+            <img src="logo.png" alt="Forno Nove logo" width="40" height="40">
+            <span>Forno Nove</span>
+        </a>
+        <div class="links">
+            <a href="menu.html">Menu</a>
+            <a href="order.html">Order</a>
+            <a href="visit.html">Visit</a>
+            <a href="our-story.html">Our Story</a>
+        </div>
     </nav>
-  </div>
 </header>
-<main id="top" class="wrap">
-  <div class="hero">
-    <div>
-      <p class="eyebrow">Wood-fired pizzeria</p>
-      <h1>Slow dough.<br><em>Fast fire.</em></h1>
-      <p class="lead">Every pie starts as a 72-hour dough and spends 90 seconds in a 485°C oven. Order for pickup or delivery, or come sit at the counter and watch the fire.</p>
-      <div class="cta">
-        <a class="btn" href="menu.html">See the menu</a>
-        <a class="btn ghost" href="visit.html">Hours &amp; location</a>
-      </div>
+
+<section class="hero-wrap">
+<div class="wrap hero">
+    <div class="hero-lead">
+        <h1>Wood-fired pizza. Milled flour.</h1>
+        <p>Authentic neapolitan sourdough pizza baked at 485°C in our handmade brick oven.</p>
+        <div class="hero-actions">
+            <a href="menu.html" class="btn">View Menu</a>
+            <a href="order.html" class="btn alt">Order Online</a>
+        </div>
     </div>
     <div class="hero-art">
-
+        <div class="hero-video">
+            <video id="heroVid" src="hero.mp4" autoplay muted loop playsinline aria-label="Forno Nove video"></video>
+            <button id="mute" class="mute" type="button" aria-label="Unmute video">🔇</button>
+        </div>
     </div>
-  </div>
-
-</main>
-
-
-<div class="bar" id="bar" hidden>
-  <div class="wrap">
-    <b id="barText">0 items · $0</b>
-    <a class="btn" href="order.html">Checkout</a>
-  </div>
 </div>
-<script type="py" src="main.py"></script>
-<script type="py">
-vid = q("#heroVid")
-mute_btn = q("#mute")
+</section>
 
+<section class="wrap">
+<div class="specs">
+    <div><b>485°C</b><span>Oven Floor, 905°F</span></div>
+    <div><b>72 hr</b><span>Cold Ferment</span></div>
+    <div><b>90 sec</b><span>In the fire</span></div>
+    <div><b>00</b><span>Milled flour</span></div>
+</div>
+</section>
 
-@when("click", "#mute")
-def toggle_mute(event):
-    vid.muted = not vid.muted
-    mute_btn.textContent = "🔇" if vid.muted else "🔊"
-    mute_btn.setAttribute("aria-label", "Unmute video" if vid.muted else "Mute video")
-    if not vid.muted:
-        vid.play()
-</script>
+<div class="wrap">
+    <footer>
+        <span>© 2026 Luke at Pizza. Wood-fired pizza.</span>
+        <span>Allergens: our kitchen handles wheat, dairy, nuts and sesame.</span>
+    </footer>
+</div>
+
+<script type="py" src="main.py" config='{"packages":[]}'></script>
 </body>
 </html>
