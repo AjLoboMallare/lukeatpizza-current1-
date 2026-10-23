@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Visit · Luke at Pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<!-- PyScript -->
+<link rel="stylesheet" href="https://pyscript.net/releases/2026.7.1/core.css">
+<script type="module" src="https://pyscript.net/releases/2026.7.1/core.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Luke at pizza logo" onerror="this.style.display='none'"><span>Luke at <span>Pizza</span></span></a>
+    <nav aria-label="Main">
+      <a href="menu.html">Menu</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="visit.html">Visit</a>
+      <a class="btn small" href="order.html">Order</a>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <section id="visit">
+    <p class="eyebrow">Visit</p>
+    <h2>Find the fire</h2>
+    <div class="visit">
+      <div class="panel">
+        <h3>Hours</h3>
+        <table class="hours" id="hours"></table>
+      </div>
+      <div class="panel">
+        <h3>Contact</h3>
+        <p class="legend">Address</p>
+        <div class="copy-row"><span class="mono" id="addrText">Dionisio Jakosalem Street (D. Jakosalem St.), Cebu City, 6000 Cebu</span><button class="btn ghost small" type="button" data-copy="addrText">Copy</button></div>
+        <p class="legend">Phone</p>
+        <div class="copy-row"><span class="mono" id="phoneText">(032) 254 2761</span><button class="btn ghost small" type="button" data-copy="phoneText">Copy</button></div>
+        <p class="legend">Email</p>
+        <div class="copy-row"><span class="mono" id="mailText">lukeatpizza@gmail.com</span><button class="btn ghost small" type="button" data-copy="mailText">Copy</button></div>
+        <p class="note">Catering, birthday trays and private evenings: call or email at least 48 hours ahead.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="wrap">
+  <footer>
+    <span>© Luke at Pizza. Wood-fired pizza.</span>
+    <span>Allergens: our kitchen handles wheat, dairy, nuts and sesame.</span>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <b id="barText">0 items · $0</b>
+    <a class="btn" href="order.html">Checkout</a>
+  </div>
+</div>
+<script type="py" src="main.py"></script>
+<script type="py">
+HOURS = [("Monday", "Closed"), ("Tuesday", "11:00 – 21:00"), ("Wednesday", "11:00 – 21:00"),
+         ("Thursday", "11:00 – 21:00"), ("Friday", "11:00 – 23:00"), ("Saturday", "11:00 – 23:00"),
+         ("Sunday", "12:00 – 21:00")]
+today = (int(window.Date.new().getDay()) + 6) % 7
+q("#hours").innerHTML = "".join(
+    "<tr%s><td>%s</td><td>%s</td></tr>" % (' class="today"' if i == today else "", d, h)
+    for i, (d, h) in enumerate(HOURS))
+
+
+@when("click", "[data-copy]")
+def copy_text(event):
+    b = event.target.closest("[data-copy]")
+    txt = document.getElementById(b.getAttribute("data-copy")).textContent
+    try:
+        window.navigator.clipboard.writeText(txt)
+        b.textContent = "Copied"
+    except Exception:
+        b.textContent = "Select text"
+    window.setTimeout(create_proxy(lambda: setattr(b, "textContent", "Copy")), 1200)
+</script>
+</body>
+</html>
