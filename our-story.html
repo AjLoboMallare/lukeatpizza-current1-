@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Our Story · Luke at Pizza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<!-- PyScript -->
+<link rel="stylesheet" href="https://pyscript.net/releases/2026.7.1/core.css">
+<script type="module" src="https://pyscript.net/releases/2026.7.1/core.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img src="logo.png" alt="Luke at pizza logo" onerror="this.style.display='none'"><span>Luke at <span>Pizza</span></span></a>
+    <nav aria-label="Main">
+      <a href="menu.html">Menu</a>
+      <a href="our-story.html">Our Story</a>
+      <a href="visit.html">Visit</a>
+      <a class="btn small" href="order.html">Order</a>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch colour theme" title="Switch colour theme">◐</button>
+    </nav>
+  </div>
+</header>
+<div class="band">
+  <div class="wrap">
+    <section id="specials">
+      <p class="eyebrow">Specials</p>
+      <h2>This week at the oven</h2>
+      <div class="specials">
+        <div class="special">
+          <div class="when">Tuesday to Thursday, 11:00 to 15:00</div>
+          <h3>Lunch pie + soda</h3>
+          <p>A 10-inch Margherita or Marinara with any soda. Dine in or pick up.</p>
+          <b>$12</b>
+        </div>
+        <div class="special">
+          <div class="when">Friday and Saturday, after 18:00</div>
+          <h3>Two large pies</h3>
+          <p>Any two large pizzas from the Classics or Bianche, plus a side of garlic knots.</p>
+          <b>$36</b>
+        </div>
+        <div class="special">
+          <div class="when">Sunday, all day</div>
+          <h3>Family tray</h3>
+          <p>Three large pies, a burrata salad and four sodas. Feeds four to six.</p>
+          <b>$62</b>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="wrap">
+  <section id="dough">
+    <p class="eyebrow">The dough</p>
+    <h2>Three days for one pizza</h2>
+    <p class="lead">We use four ingredients in the dough: flour, water, salt and a pinch of yeast. The time does the rest.</p>
+    <ol class="steps">
+      <li><h3>Mix and rest</h3><p>Flour, water, salt and yeast are mixed by hand and rested until smooth and slack.</p><span class="time">Day 1 · 20 min</span></li>
+      <li><h3>Cold ferment</h3><p>Balls go into the cooler for 72 hours. The slow rise builds flavour and a light, blistered crust.</p><span class="time">Day 1 to 4 · 72 hr</span></li>
+      <li><h3>Stretch by hand</h3><p>No rolling pin. Each ball is opened by hand so the edge keeps its air.</p><span class="time">To order · 1 min</span></li>
+      <li><h3>Fire</h3><p>Into the wood-fired oven at 485°C, turned once, out when the crust leopard-spots.</p><span class="time">To order · 90 sec</span></li>
+    </ol>
+  </section>
+</div>
+<div class="wrap">
+  <footer>
+    <span>© Luke at Pizza. Wood-fired pizza.</span>
+    <span>Allergens: our kitchen handles wheat, dairy, nuts and sesame.</span>
+  </footer>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <b id="barText">0 items · $0</b>
+    <a class="btn" href="order.html">Checkout</a>
+  </div>
+</div>
+<script type="py" src="main.py"></script>
+</body>
+</html>
